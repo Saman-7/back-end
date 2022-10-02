@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { objId } from "../types/types";
+import errors = require("../helpers/error/path");
 
 export interface IEvent {
   _id: objId;
@@ -16,12 +17,12 @@ export interface IEvent {
 }
 
 export interface IEventRepo {
-  getCurrentEvent(): Promise<IEvent>;
+  getCurrentEvent(): Promise<IEvent | null>;
 }
 
 export interface IEventService {
   eventRepo: IEventRepo;
-  getCurrentEvent(): Promise<IEvent>;
+  getCurrentEvent(): Promise<IEvent | errors.NotFoundError>;
 }
 
 export interface IEventController {
