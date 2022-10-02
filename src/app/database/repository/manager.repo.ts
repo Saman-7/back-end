@@ -33,11 +33,13 @@ export class ManagerRepo implements IManagerRepo {
 
   getManagerById = async (
     managerId: objId,
-    populate?: any
+    populate?: any,
+    select?: any
   ): Promise<IManager> => {
     const manager = await models.managerModel
-      .findById(managerId)
+      .findById(managerId, select)
       .populate(populate);
+
     return manager;
   };
 
@@ -111,15 +113,14 @@ export class ManagerRepo implements IManagerRepo {
   updateManager = async (
     managerId: objId,
     newManager: managerUpdateType
-  ): Promise<IManager | null> => {
+  ): Promise<boolean> => {
     let response: updateMongoResponseType = await models.managerModel.updateOne(
       { _id: managerId },
       newManager
     );
     if (response.matchedCount == 0) {
-      return null;
+      return false;
     }
-    const manager: IManager = await this.getManagerById(managerId);
-    return manager;
+    return true;
   };
 }

@@ -1,6 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 import { IManager } from "../interface/manager.interface";
-import bcrypt from "bcrypt";
+import utils = require("../helpers/utils/utils");
 
 const managerSchema = new Schema<IManager>(
   {
@@ -29,7 +29,6 @@ const managerSchema = new Schema<IManager>(
     },
     password: {
       type: String,
-      select: true,
       default: null,
       required: true,
     },
@@ -55,6 +54,11 @@ const managerSchema = new Schema<IManager>(
       type: Number,
       default: 0,
     },
+    image: {
+      type: Types.ObjectId,
+      default: null,
+      ref: "File",
+    },
   },
   { versionKey: false }
 );
@@ -62,8 +66,7 @@ const managerSchema = new Schema<IManager>(
 managerSchema.pre("save", async function (next: any) {
   if (!this.isModified("password")) return next();
   try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password.toString(), salt);
+    this.password = await utils.hashPassword(this.password.toString());
     return next();
   } catch (error) {
     return next(error);
