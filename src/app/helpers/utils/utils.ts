@@ -9,6 +9,8 @@ import nodemailer from "nodemailer";
 import { Request, Response } from "express";
 import path from "path";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { objId } from "../../types/types";
 
 export const paginationResponseToFront = async (
   response: paginateResponseType
@@ -99,4 +101,17 @@ export const hashPassword = async (password: string): Promise<string> => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
   return hashedPassword;
+};
+
+export const bcryptCompare = async (
+  password1: string,
+  password2: string
+): Promise<boolean> => {
+  const isValid: boolean = await bcrypt.compare(password1, password2);
+  return isValid;
+};
+
+export const getToken = async (managerId: objId): Promise<string> => {
+  const token: string = jwt.sign({ id: managerId }, process.env.HASH_KEY!);
+  return token;
 };
