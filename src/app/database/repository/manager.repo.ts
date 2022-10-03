@@ -69,19 +69,6 @@ export class ManagerRepo implements IManagerRepo {
     );
   };
 
-  updateTeamById = async (
-    teamId: objId,
-    data: objId | null,
-    index: number
-  ): Promise<void> => {
-    //maybe team repo needed
-    await models.teamModel.findByIdAndUpdate(teamId, {
-      $set: {
-        [`picks.${index}.player`]: data,
-      },
-    });
-  };
-
   createManager = async (managerData: managerSignUpType): Promise<IManager> => {
     const manager: IManager = await models.managerModel.create(managerData);
     return manager;

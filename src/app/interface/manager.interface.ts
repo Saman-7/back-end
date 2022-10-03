@@ -11,11 +11,6 @@ export interface IManagerRepo {
   getTeamByManagerId(managerId: objId): Promise<Array<IPick>>;
   getTeamDetailByManagerId(managerId: objId): Promise<any>;
   updateManagerBudgetById(managerId: objId, budget: number): Promise<void>;
-  updateTeamById(
-    teamId: objId,
-    data: objId | null,
-    index: number
-  ): Promise<void>;
   createManager(managerData: object): Promise<IManager>;
   findManager(username: string): Promise<IManager>;
   createTeam(): Promise<objId>;

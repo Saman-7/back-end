@@ -12,9 +12,9 @@ import { FeedRepo } from "../database/repository/feed.repo";
 export class TeamService implements ITeamService {
   managerRepo: IManagerRepo;
   playerRepo: IPlayerRepo;
-  teamRepo:TeamRepo;
-  eventRepo:EventRepo;
-  feedRepo:FeedRepo;
+  teamRepo: TeamRepo;
+  eventRepo: EventRepo;
+  feedRepo: FeedRepo;
 
   constructor() {
     this.managerRepo = new ManagerRepo();
@@ -45,7 +45,7 @@ export class TeamService implements ITeamService {
     }
     const player: IPlayer = await this.playerRepo.getPlayerById(playerId);
 
-    if (await this.teamLimit(player, team) == false) {      
+    if ((await this.teamLimit(player, team)) == false) {
       return "not allowed to add more than 3 players from one team";
     }
     if (currentBudget < player.now_cost) {
@@ -57,35 +57,45 @@ export class TeamService implements ITeamService {
 
     const budget: number = currentBudget - Number(player.now_cost);
     await this.managerRepo.updateManagerBudgetById(manager!._id, budget);
-    await this.managerRepo.updateTeamById(manager!.teamId!, player._id, index);
+    await this.teamRepo.updateTeamById(manager!.teamId!, player._id, index);
     return "OK";
   };
 
-  changePlayer = async(managerId:objId, inId:number,inPlayerId:objId,outId:number,outPlayerId:objId): Promise<boolean> => {
-    const manager:IManager|null = await this.managerRepo.getManagerById(managerId);
-    if(manager===null) {return false;}
-    const teamId:objId = manager.teamId!;
-    const inPlayer:IPlayer = await this.playerRepo.getPlayerById(inPlayerId);    
-    const outPlayer:IPlayer = await this.playerRepo.getPlayerById(outPlayerId); 
-       
-    if (this.checkIndex(inPlayer, outId)===false) {
+  changePlayer = async (
+    managerId: objId,
+    inId: number,
+    inPlayerId: objId,
+    outId: number,
+    outPlayerId: objId
+  ): Promise<boolean> => {
+    const manager: IManager | null = await this.managerRepo.getManagerById(
+      managerId
+    );
+    if (manager === null) {
+      return false;
+    }
+    const teamId: objId = manager.teamId!;
+    const inPlayer: IPlayer = await this.playerRepo.getPlayerById(inPlayerId);
+    const outPlayer: IPlayer = await this.playerRepo.getPlayerById(outPlayerId);
+
+    if (this.checkIndex(inPlayer, outId) === false) {
       return false;
     }
 
-    if (this.checkIndex(outPlayer, inId)===false) {
+    if (this.checkIndex(outPlayer, inId) === false) {
       return false;
     }
 
-    await this.teamRepo.updateTeamById(teamId,inPlayer._id,inId);
-    await this.teamRepo.updateTeamById(teamId,outPlayer._id,outId);
-    const event:IEvent = await this.eventRepo.getCurrentEvent();
-    const sub:substitution = {
-      in:inPlayerId,
-      out:outPlayerId
-    }
-    await this.feedRepo.addSub(managerId,sub,event._id);
+    await this.teamRepo.updateTeamById(teamId, inPlayer._id, inId);
+    await this.teamRepo.updateTeamById(teamId, outPlayer._id, outId);
+    const event: IEvent = await this.eventRepo.getCurrentEvent();
+    const sub: substitution = {
+      in: inPlayerId,
+      out: outPlayerId,
+    };
+    await this.feedRepo.addSub(managerId, sub, event._id);
     return true;
-  }
+  };
 
   deletePlayerFromTeam = async (
     managerId: objId,
@@ -100,7 +110,7 @@ export class TeamService implements ITeamService {
 
     const budget: number = currentBudget + Number(player.now_cost);
     await this.managerRepo.updateManagerBudgetById(manager!._id, budget);
-    await this.managerRepo.updateTeamById(manager!.teamId!, null, index);
+    await this.teamRepo.updateTeamById(manager!.teamId!, null, index);
     return "OK";
   };
 
@@ -171,5 +181,4 @@ export class TeamService implements ITeamService {
     }
     return totalPoints;
   };
-
 }
