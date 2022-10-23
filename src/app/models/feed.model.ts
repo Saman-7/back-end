@@ -11,10 +11,22 @@ const feedSchema = new Schema<IFeed>(
         points:{
             type:Number
         },
-        substitutions:{
-            type:Array<substitution>,
-            default:[]
-        },
+        substitutions:[
+            {
+                in:{
+                    type:mongoose.Types.ObjectId,
+                    ref:"Player"
+                },
+                out:{
+                    type:mongoose.Types.ObjectId,
+                    ref:"Player"
+                }
+            }
+        ],
+        // substitutions:{
+        //     type:Array<substitution>,
+        //     default:[]
+        // },
         event:{
             type:mongoose.Types.ObjectId,
             ref:"Event"

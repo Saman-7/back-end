@@ -42,8 +42,8 @@ type feedCreationType = {
 };
 
 type substitution = {
-  in: objId;
-  out: objId;
+  in: mongoose.Types.ObjectId;
+  out: mongoose.Types.ObjectId;
 };
 
 export type substitutionRsponse = {

@@ -40,13 +40,14 @@ export const mailSender = async (
   let flag = 0;
   let transporter = nodemailer.createTransport({
     service: "gmail",
+    secure:true,
     auth: {
-      user: "rcdev.team2@gmail.com",
-      pass: "xqpxkysdawyyivrf",
+      user: "info.rcteam2@gmail.com",
+      pass: "xpfjwyxlihigjpgh",
     },
   });
   let mailOptions = {
-    from: "rcdev.team2@gmail.com",
+    from: "info.rcteam2@gmail.com",
     to: receiver,
     subject: subject,
     text: text,
