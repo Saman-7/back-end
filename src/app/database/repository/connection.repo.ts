@@ -23,9 +23,10 @@ export class ConnectionRepo implements IConnectionRepo {
 
   async isFollowing(managerId: objId, target: objId): Promise<boolean> {
     const relation = await models.connectionModel.findOne({
-      following: target,
       follower: managerId,
+      following: target
     });
+    
     if (!relation) {
       return false;
     }

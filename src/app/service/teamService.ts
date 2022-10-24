@@ -83,6 +83,8 @@ export class TeamService implements ITeamService {
       in:outPlayerId,
       out:inPlayerId
     }
+    console.log("sub: ", sub);
+    
     await this.feedRepo.addSub(managerId,sub,event._id);
     return true;
   }

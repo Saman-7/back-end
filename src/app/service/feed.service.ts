@@ -28,17 +28,17 @@ export class FeedService implements IFeedService {
 
     displayFeeds = async(managerId: objId): Promise<feedDisplay[]> => {
         const gameWeek:number = parseInt((await this.eventRepo.getCurrentEvent()).generalId)-1;        
-        const managers:IManager[] = await this.managerRepo.getManagers();
+        const managers:IManager[] = await this.managerRepo.getManagers();        
         let followings:objId[] = [];
         let result:feedDisplay[] = [];
         
         // find connections in which follower is manager:improve
-        for(let manager of managers) {
-            if(await this.connectionRepo.isFollowing(managerId,manager._id)) {
+        for(let manager of managers) {            
+            if(await this.connectionRepo.isFollowing(managerId,manager._id)===true) {
                 followings.push(manager._id);
             }
         }
-        
+
         const feeds:IFeed[] = await this.feedRepo.getFeeds(gameWeek,followings);
         
         for(let feed of feeds) {
