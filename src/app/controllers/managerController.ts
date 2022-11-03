@@ -81,4 +81,33 @@ export class ManagerController
       );
     }
   };
+
+  public getProfile = async (
+    req: Request,
+    res: Response
+  ): Promise<Response> => {
+    try {
+      await utils.validationErrorHandler(req);
+      let result: IManager | errors.NotFoundError =
+        await this.managerService.getManagerProfileById(
+          new mongoose.Types.ObjectId(req._id)
+        );
+      if (result instanceof errors.BaseError) {
+        throw result;
+      }
+      return await this.generalSuccessfulResponse(
+        res,
+        "getting manager successful",
+        { manager: result }
+      );
+    } catch (err: any) {
+      if (err instanceof errors.BaseError) {
+        return this.sendFailedResponse(res, err);
+      }
+      return this.sendFailedResponse(
+        res,
+        new errors.InternalServerError("getting manager failed")
+      );
+    }
+  };
 }

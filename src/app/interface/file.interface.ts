@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import errors = require("../helpers/error/path");
+import { objId } from "../types/types";
 
 export interface IFile {
   name: string;
@@ -16,9 +18,13 @@ export interface IFileController {
 
 export interface IFileService {
   fileRepo: IFileRepo;
-  createFile(file: Express.Multer.File): Promise<IFile>;
+  createFile(
+    file: Express.Multer.File
+  ): Promise<IFile | errors.InternalServerError>;
+  getFileById(fileId: objId): Promise<IFile | errors.NotFoundError>;
 }
 
 export interface IFileRepo {
   createFile(file: IFile): Promise<IFile>;
+  getFileById(fileId: objId): Promise<IFile>;
 }

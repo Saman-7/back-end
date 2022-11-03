@@ -6,6 +6,7 @@ const router = express.Router();
 const managerController = new ManagerController();
 
 router.get("/dashboard", authToken, managerController.getDashboard);
+router.get("/profile", authToken, managerController.getProfile);
 router.patch(
   "/update",
   authToken,

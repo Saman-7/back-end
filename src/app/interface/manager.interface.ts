@@ -5,7 +5,11 @@ import { managerUpdateType } from "../types/manager.type";
 import errors = require("../helpers/error/path");
 
 export interface IManagerRepo {
-  getManagerById(managerId: objId): Promise<IManager | null>;
+  getManagerById(
+    managerId: objId,
+    populate?: any,
+    select?: any
+  ): Promise<IManager | null>;
   getManagersByName(name: string): Promise<IManager[] | null>;
   getManagers(): Promise<Array<IManager>>;
   getTeamByManagerId(managerId: objId): Promise<Array<IPick>>;
@@ -18,7 +22,7 @@ export interface IManagerRepo {
   updateManager(
     managerId: objId,
     newManager: managerUpdateType
-  ): Promise<IManager | null>;
+  ): Promise<boolean>;
 }
 
 export interface IManager {
@@ -33,6 +37,7 @@ export interface IManager {
   points: number;
   budget: number;
   teamId?: objId;
+  image?: objId;
 }
 
 export interface IManagerController {
@@ -48,6 +53,7 @@ export interface IManagerService {
   getManagerById(managerId: objId): Promise<IManager>;
   getManagerByEmail(email: string): Promise<IManager>;
   getManagerByUsername(username: string): Promise<IManager>;
+  getManagerProfileById(managerId: objId): Promise<IManager>;
   updateManager(
     managerId: objId,
     newManager: managerUpdateType
