@@ -82,17 +82,15 @@ export class TeamService implements ITeamService {
       return false;
     }
 
-    if (this.checkIndex(outPlayer, inId) === false) {
-      return false;
-    }
-
-    await this.teamRepo.updateTeamById(teamId, inPlayer._id, inId);
-    await this.teamRepo.updateTeamById(teamId, outPlayer._id, outId);
+    await this.teamRepo.updateTeamById(teamId, inPlayer._id, outId);
+    await this.teamRepo.updateTeamById(teamId, outPlayer._id, inId);
     const event: IEvent = await this.eventRepo.getCurrentEvent();
     const sub: substitution = {
-      in: inPlayerId,
-      out: outPlayerId,
+      in: outPlayerId,
+      out: inPlayerId,
     };
+    console.log("sub: ", sub);
+
     await this.feedRepo.addSub(managerId, sub, event._id);
     return true;
   };

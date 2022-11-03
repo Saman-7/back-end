@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import models = require("../../models/path");
 import { IFeed, IFeedRepo } from "../../interface/feed.interface";
 import {
@@ -24,10 +23,12 @@ export class FeedRepo implements IFeedRepo {
     const event: IEvent = await models.eventModel.findOne({
       generalId: gameWeek.toString(),
     });
+
     const feeds: IFeed[] = await models.feedModel.find({
       event: event._id,
       managerId: { $in: managersId },
     });
+
     return feeds;
   };
 
@@ -46,7 +47,6 @@ export class FeedRepo implements IFeedRepo {
       };
       result.push(data);
     }
-    console.log(result);
     return result;
   };
 
@@ -55,12 +55,13 @@ export class FeedRepo implements IFeedRepo {
     sub: substitution,
     event: objId
   ): Promise<void> => {
-    await models.feedModel.findOneAndUpdate(
+    const test = await models.feedModel.findOneAndUpdate(
       { managerId: managerId, event: event },
       {
-        $push: { substitutions: { sub } },
+        $push: { substitutions: { in: sub.in, out: sub.out } },
       }
     );
+    console.log(test.substitutions);
   };
 
   async createFeed(managerId: objId): Promise<void> {
@@ -71,7 +72,7 @@ export class FeedRepo implements IFeedRepo {
       const data: feedCreationType = {
         managerId: managerId,
         points: 0,
-        substitutions: null,
+        substitutions: [],
         event: event._id,
       };
       await models.feedModel.create(data);

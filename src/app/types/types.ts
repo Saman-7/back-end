@@ -42,8 +42,8 @@ type feedCreationType = {
 };
 
 type substitution = {
-  in: objId;
-  out: objId;
+  in: mongoose.Types.ObjectId;
+  out: mongoose.Types.ObjectId;
 };
 
 export type substitutionRsponse = {
@@ -60,6 +60,7 @@ export type feedDisplay = {
   first_name: string;
   last_name: string;
   feedId?: objId;
+  img:string|null;
 };
 
 export type repoReponseType = {

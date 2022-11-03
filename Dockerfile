@@ -1,5 +1,5 @@
 # baseimage
-FROM node:16
+FROM hub.hamdocker.ir/node:16
 # command
 COPY package.json .
 RUN npm i --omit=dev

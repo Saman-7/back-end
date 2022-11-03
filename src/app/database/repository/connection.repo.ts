@@ -21,19 +21,12 @@ export class ConnectionRepo implements IConnectionRepo {
     });
   }
 
-  // async findFollowings(managerId: objId): Promise<objId[]> {
-  //     throw new Error('Method not implemented.');
-  // };
-
-  // async findFollowers(managerId: objId): Promise<objId[]> {
-  //     throw new Error('Method not implemented.');
-  // };
-
   async isFollowing(managerId: objId, target: objId): Promise<boolean> {
     const relation = await models.connectionModel.findOne({
-      following: target,
       follower: managerId,
+      following: target
     });
+    
     if (!relation) {
       return false;
     }
