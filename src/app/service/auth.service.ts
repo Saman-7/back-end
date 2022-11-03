@@ -13,7 +13,7 @@ import {
 } from "../types/types";
 const redis = require("redis");
 // { url: "redis://redis:6379" }
-let redisClient = redis.createClient();
+let redisClient = redis.createClient({ url: "redis://redis:6379" });
 redisClient.connect();
 redisClient.on("connect", () => {
   console.log("Connected!");
