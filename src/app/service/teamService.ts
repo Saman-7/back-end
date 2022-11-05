@@ -84,14 +84,14 @@ export class TeamService implements ITeamService {
 
     await this.teamRepo.updateTeamById(teamId, inPlayer._id, outId);
     await this.teamRepo.updateTeamById(teamId, outPlayer._id, inId);
-    const event: IEvent = await this.eventRepo.getCurrentEvent();
+    const event: IEvent | null = await this.eventRepo.getCurrentEvent();
     const sub: substitution = {
       in: outPlayerId,
       out: inPlayerId,
     };
     console.log("sub: ", sub);
 
-    await this.feedRepo.addSub(managerId, sub, event._id);
+    await this.feedRepo.addSub(managerId, sub, event!._id);
     return true;
   };
 
