@@ -65,7 +65,7 @@ export class FeedRepo implements IFeedRepo {
   };
 
   async createFeed(managerId: objId): Promise<void> {
-    for (let i = 1; i <= 38; i++) {
+    for (let i = 14; i <= 20; i++) {
       const event: IEvent = await models.eventModel.findOne({
         generalId: i.toString(),
       });
