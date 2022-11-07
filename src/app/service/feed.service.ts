@@ -27,7 +27,7 @@ export class FeedService implements IFeedService {
     }
 
     displayFeeds = async(managerId: objId): Promise<feedDisplay[]> => {
-        const gameWeek:number = parseInt((await this.eventRepo.getCurrentEvent()).generalId)-1;        
+        const gameWeek:number = parseInt((await this.eventRepo.getCurrentEvent())!.generalId)-1;        
         const managers:IManager[] = await this.managerRepo.getManagers();        
         let followings:objId[] = [];
         let result:feedDisplay[] = [];
