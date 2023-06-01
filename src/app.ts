@@ -21,6 +21,10 @@ app.use("/api/v1/events", routes.eventRoute);
 app.use("/api/v1/feeds", routes.feedRoute);
 app.use("/api/v1/files", routes.fileRoute);
 
+app.get("/test", (req: any, res: any) => {
+  res.send("success :)");
+});
+
 const setupServer = async () => {
   await db();
   app.listen(port, () => {
